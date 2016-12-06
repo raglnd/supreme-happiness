@@ -51,14 +51,14 @@ public class PositionPanel extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnRight) {
 			System.out.println("You pressed right button.");
-			EntryClass.sphereX++;
-			EntryClass.tipArrowX++;
+			JoglEventListener.sphereX++;
+			JoglEventListener.tipArrowX++;
 		}
 		
 		else {
 			System.out.println("You pressed left");
-			EntryClass.sphereX--;
-			EntryClass.tipArrowX--;
+			JoglEventListener.sphereX--;
+			JoglEventListener.tipArrowX--;
 		}
 		
 	}

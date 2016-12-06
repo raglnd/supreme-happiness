@@ -63,16 +63,16 @@ public class DirectionPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnUp)
-			EntryClass.tipArrowY++;
+			JoglEventListener.tipArrowY++;
 		
 		else if(e.getSource() == btnDown)
-			EntryClass.tipArrowY--;
+			JoglEventListener.tipArrowY--;
 		
 		else if(e.getSource() == btnLeft)
-			EntryClass.tipArrowX--;
+			JoglEventListener.tipArrowX--;
 		
 		else
-			EntryClass.tipArrowX++;
+			JoglEventListener.tipArrowX++;
 		
 	}
 
