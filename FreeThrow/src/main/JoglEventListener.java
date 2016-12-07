@@ -320,7 +320,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
     			    gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
     		
     			    
-    			    gl.glEnable(GL.GL_TEXTURE_2D);
+    			    
     			             
     			     } catch (Exception ex) {
     			    	 ex.printStackTrace();
@@ -338,7 +338,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
     			gl.glEnable(GL2.GL_LIGHTING);
     			gl.glEnable(GL2.GL_LIGHT0);
     			
-    			gl.glEnable(GL2.GL_COLOR_MATERIAL);
+
     	    }
 
 
@@ -402,11 +402,13 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
     	    	
     	    	//gl.glFlush();
     	    	
+    			gl.glEnable(GL.GL_TEXTURE_2D);
     	    	gl.glPushMatrix();
     		    //gl.glTranslatef(0, 0, translateZ); // Zoom Image - Key Typed W/S
     		    //gl.glRotatef(rot, 0, 1, 0); // Rotate Image - Key Typed A/D
     		    drawSkybox(gl); // Draw Skybox
     		    gl.glPopMatrix();
+    		    gl.glDisable(GL.GL_TEXTURE_2D);
     	    	
     		}
     		
@@ -418,7 +420,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
     			if(sphereTimePassed == 0) {
     				gl.glPushMatrix();
     				gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
-    				gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, redDiffuseMaterial, 0);
+    				//gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, redDiffuseMaterial, 0);
     				
     				gl.glTranslatef(sphereX, sphereY, sphereZ);
     				glut.glutSolidSphere(2, 50, 50);
@@ -429,7 +431,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
     				System.out.print("Will be executing this code.");
     				gl.glPushMatrix();
     				gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
-    				gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, redDiffuseMaterial, 0);
+    				//gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, redDiffuseMaterial, 0);
     				
     				// calculate velocities
     				
