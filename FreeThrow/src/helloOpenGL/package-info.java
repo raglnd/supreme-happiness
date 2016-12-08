@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author sdavidson
- *
- */
-package helloOpenGL;

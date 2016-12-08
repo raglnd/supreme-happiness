@@ -83,13 +83,13 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static int sphereTimePassed = 0;
 	static boolean canTransform = false;
 
-	float cameraX = 0;
-	float cameraY = 0;
-	float cameraZ = 0;
+	float cameraX = 6;
+	float cameraY = 5.5f * 12;
+	float cameraZ = -1 * 12;
 	
-	float lookAtX = 0;
-	float lookAtY = -1;
-	float lookAtZ = -1;
+	float lookAtX = 6;
+	float lookAtY = 5.5f * 12;
+	float lookAtZ = 1;
 
 	/* -------- Texture Variables --------- */
 	Texture texNegX = null;
@@ -116,18 +116,38 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	static float sphereRadius = 4.775f; // A basketball is ~ 4.775 inches in diameter.
 	static float sphereX = 0; // -5
-	static float sphereY = 6; // 0
-	static float sphereZ = -12 * 3; // 5
+	static float sphereY = 5 * 12; // 0
+	static float sphereZ = 0; // 5
 	static float tipArrowX = 0; //0
-	static float tipArrowY = sphereY + 5; // 0
-	static float tipArrowZ = sphereZ - 5; // 0
+	static float tipArrowY = 16 * 12; // 0
+	static float tipArrowZ = 18 * 12; // 0
 	
 	static float freeThrowZ = sphereZ;
 	
 	static float dampening = 0.9f;
-	static float floorY = -54;
+	
+	
+	static float floorY = 0;
+	static float floorFar = 10 * 12;
+	static float floorNear = -10 * 12;
+	static float floorLeft = -10 * 12;
+	static float floorRight = 10 * 12;
 
+	float backboardZ = 18 * 12; // 15 feet from free throw line at z = -3 feet;	
+	float backboardTop = 162;
+	float backboardBottom= 120;
+	float backboardLeft = -36;
+	float backboardRight = 36;
+	
 	static float[] sphereVelocity = {0, 0, 0};
+	
+	static float[] getUnitVelocity(float x, float y, float z)
+	{
+		float mag = (float)Math.sqrt(x*x+y*y+z*z);
+		float[] vel = {x/mag, y/mag, z/mag};
+		
+		return vel;
+	}
 
 	static boolean powerFlag = true;
 	static boolean replayFlag = true;
@@ -143,7 +163,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 
 	/* ----- Draw Skybox Function --------- */
-	int skybox_dist = 10;
+	int skybox_dist = 100000;
 	float skybox_4 = 0f;
 	public void drawSkybox(final GL2 gl) 
 	{
@@ -294,12 +314,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		/* ------ Load the Textures -------- */
 		try 
 		{	
-			texNegX = TextureIO.newTexture(new File("negx.jpg"), false);
-			texPosX = TextureIO.newTexture(new File("posx.jpg"), false);
-			texNegY = TextureIO.newTexture(new File("negy.jpg"), false);
-			texPosY = TextureIO.newTexture(new File("posy.jpg"), false);
-			texNegZ = TextureIO.newTexture(new File("negz.jpg"), false);
-			texPosZ = TextureIO.newTexture(new File("posz.jpg"), false);
+			texNegX = TextureIO.newTexture(new File("purplenebula_negx.jpg"), false);
+			texPosX = TextureIO.newTexture(new File("purplenebula_posx.jpg"), false);
+			texNegY = TextureIO.newTexture(new File("purplenebula_negy.jpg"), false);
+			texPosY = TextureIO.newTexture(new File("purplenebula_posy.jpg"), false);
+			texNegZ = TextureIO.newTexture(new File("purplenebula_negz.jpg"), false);
+			texPosZ = TextureIO.newTexture(new File("purplenebula_posz.jpg"), false);
 
 			texIDNegX = texNegX.getTextureObject();
 			texIDPosX = texPosX.getTextureObject();
@@ -387,7 +407,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		if(!canTransform) {
 			// Draw Direction Arrow
 			gl.glBegin(gl.GL_LINES);
-			gl.glColor3f(0, 0, 0);
+			gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, whiteDiffuseLight, 0);
+			gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, whiteDiffuseLight, 0);
 
 			// Tail of Arrow - adjusted by Position Panel
 			gl.glVertex3f(sphereX, sphereY, sphereZ);
@@ -424,12 +445,47 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		
 		// Collision checks.
 		// Floor
-		if ((sphereY-sphereRadius) < floorY)
+		if (floorLeft-sphereRadius < sphereX && sphereX < floorRight+sphereRadius)
 		{
-			sphereVelocity[1] = -sphereVelocity[1];
-			sphereY = floorY + sphereRadius;
+			if (floorY-sphereRadius < sphereY && sphereY < floorY+sphereRadius)
+			{
+				if (floorNear-sphereRadius < sphereZ && sphereZ < floorFar+sphereRadius)
+				{
+					sphereVelocity[1] = -sphereVelocity[1];
+					sphereY = floorY + sphereRadius;
+					
+					bounced();
+				}
+			}
+		}
+		
+		// Backboard
+		if (backboardLeft-sphereRadius < sphereX && sphereX < backboardRight+sphereRadius)
+		{
+			if (backboardBottom-sphereRadius < sphereY && sphereY < backboardTop+sphereRadius)
+			{
+				if (backboardZ-sphereRadius < sphereZ && sphereZ < backboardZ+sphereRadius)
+				{
+					sphereVelocity[2] = -sphereVelocity[2];
+					sphereZ = sphereZ - sphereRadius;
+					
+					bounced();
+				}
+			}
+		}
+		/*
+		if ((sphereZ+sphereRadius) < backboardZ && (sphereZ-sphereRadius) > backboardZ)
+		{
+			sphereVelocity[2] = -sphereVelocity[2];
 			
 			bounced();
+		}
+		*/
+		
+		// Rim
+		if (false)
+		{
+			
 		}
 		
 		// Change due to gravity.
@@ -444,6 +500,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	{
 		gl.glPushMatrix();
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, blankMaterial, 0);
 		if(sphereTimePassed == 0) 
 		{
 			// Intentionally blank.
@@ -468,19 +525,15 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	void drawBackboard(final GL2 gl) {
 		gl.glPushMatrix();
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, greenEmissiveMaterial, 0);
-		
-		int backboardWidth = 72;
-		int backboardLength = 42;
-		int backboardHeight = 120; // 10 feet
-		int backboardZ = -18 * 12; // 15 feet from free throw line at z = -3 feet;
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, greenEmissiveMaterial, 0);
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, blankMaterial, 0);
 		
 		gl.glBegin(gl.GL_QUADS);
 		
-		gl.glVertex3f(-backboardWidth/2, backboardLength + backboardHeight, backboardZ);
-		gl.glVertex3f(-backboardWidth/2, backboardHeight, backboardZ);
-		gl.glVertex3f(backboardWidth/2, backboardHeight, backboardZ);
-		gl.glVertex3f(backboardWidth/2, backboardLength + backboardHeight, backboardZ);
+		gl.glVertex3f(backboardLeft, backboardTop, backboardZ);
+		gl.glVertex3f(backboardLeft, backboardBottom, backboardZ);
+		gl.glVertex3f(backboardRight, backboardBottom, backboardZ);
+		gl.glVertex3f(backboardRight, backboardTop, backboardZ);
 	
 		gl.glEnd();
 		
@@ -491,10 +544,11 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	void drawRim(final GL2 gl) {
 		gl.glPushMatrix();
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, blankMaterial, 0);
 
 		int rimHeight = 10 * 12; // 10 feet
-		float rimZ = -15 * 12 + freeThrowZ; // 15 feet from free throw line at z = -3 feet
-		rimZ += 9 + 6 + 1; // hoop inner radius + distance from backboard + hoop outer radius
+		float rimZ = 15 * 12 + freeThrowZ; // 15 feet from free throw line at z = 3 feet
+		rimZ -= 9 + 6 + 1; // hoop inner radius + distance from backboard + hoop outer radius
 		
 		gl.glTranslatef(0, rimHeight, rimZ);
 		gl.glRotatef(90, 1, 0, 0);
@@ -506,18 +560,15 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	void drawFloor(final GL2 gl) {
 		gl.glPushMatrix();
-		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, greenEmissiveMaterial, 0);
-		
-		float floorWidth = 12*10;
-		float floorLength = 12*10;
-		
-		
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, greenEmissiveMaterial, 0);
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, blankMaterial, 0);
+			
 		gl.glBegin(gl.GL_QUADS);
 		
-		gl.glVertex3f(-floorWidth, floorY, -floorLength);
-		gl.glVertex3f(-floorWidth, floorY, floorLength);
-		gl.glVertex3f(floorWidth, floorY, floorLength);
-		gl.glVertex3f(floorWidth, floorY, -floorLength);
+		gl.glVertex3f(floorLeft, floorY, floorNear);
+		gl.glVertex3f(floorLeft, floorY, floorFar);
+		gl.glVertex3f(floorRight, floorY, floorFar);
+		gl.glVertex3f(floorRight, floorY, floorNear);
 		
 		gl.glEnd();
 		
@@ -584,6 +635,14 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 					canTransform = true;
 					// start Timer for sphere transformation
 					sphereT.start();
+					System.out.println(String.format("{%f, %f, %f}", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]));
+					sphereVelocity = getUnitVelocity(tipArrowX-sphereX, tipArrowY-sphereY, tipArrowZ-sphereZ);
+					for (int i = 0; i < 3; ++i)
+					{
+						sphereVelocity[i] *= v0;
+						sphereVelocity[i] *= .005f;
+					}
+					System.out.println(String.format("{%f, %f, %f}", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]));
 				}
 				else // Didn't stop before maximum 
 				{ 

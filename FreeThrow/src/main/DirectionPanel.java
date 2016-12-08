@@ -69,10 +69,10 @@ public class DirectionPanel extends JPanel implements ActionListener {
 			JoglEventListener.tipArrowY--;
 		
 		else if(e.getSource() == btnLeft)
-			JoglEventListener.tipArrowX--;
+			JoglEventListener.tipArrowX++;
 		
 		else
-			JoglEventListener.tipArrowX++;
+			JoglEventListener.tipArrowX--;
 		
 	}
 
