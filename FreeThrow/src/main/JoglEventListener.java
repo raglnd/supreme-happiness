@@ -88,8 +88,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	float cameraZ = 0;
 	
 	float lookAtX = 0;
-	float lookAtY = 0;
-	float lookAtZ = 5;
+	float lookAtY = -1;
+	float lookAtZ = -1;
 
 	/* -------- Texture Variables --------- */
 	Texture texNegX = null;
@@ -121,6 +121,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static float tipArrowX = 0; //0
 	static float tipArrowY = sphereY + 5; // 0
 	static float tipArrowZ = sphereZ - 5; // 0
+	
+	static float freeThrowZ = sphereZ;
 	
 	static float dampening = 0.9f;
 	static float floorY = -54;
@@ -347,7 +349,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
 		// gl.glOrtho(-orthoX*0.5, orthoX*0.5, -orthoX*0.5*height/width, orthoX*0.5*height/width, -100, 100);
-		glu.gluPerspective(45.0f, h, 1, 100000.0);
+		glu.gluPerspective(75.0f, h, 1, 100000.0);
 
 	}
 
@@ -374,9 +376,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 
 
-		gl.glLoadIdentity(); 
+		//gl.glLoadIdentity(); 
 
 		drawBasketball(gl);
+		drawBackboard(gl);
+		drawRim(gl);
+		drawFloor(gl);
 
 
 		if(!canTransform) {
@@ -459,6 +464,65 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		// draw sphere
 		glut.glutSolidSphere(sphereRadius, 50, 50);
 		gl.glPopMatrix();
+	}
+	
+	void drawBackboard(final GL2 gl) {
+		gl.glPushMatrix();
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, greenEmissiveMaterial, 0);
+		
+		int backboardWidth = 72;
+		int backboardLength = 42;
+		int backboardHeight = 120; // 10 feet
+		int backboardZ = -18 * 12; // 15 feet from free throw line at z = -3 feet;
+		
+		gl.glBegin(gl.GL_QUADS);
+		
+		gl.glVertex3f(-backboardWidth/2, backboardLength + backboardHeight, backboardZ);
+		gl.glVertex3f(-backboardWidth/2, backboardHeight, backboardZ);
+		gl.glVertex3f(backboardWidth/2, backboardHeight, backboardZ);
+		gl.glVertex3f(backboardWidth/2, backboardLength + backboardHeight, backboardZ);
+	
+		gl.glEnd();
+		
+		gl.glPopMatrix();
+		
+	}
+	
+	void drawRim(final GL2 gl) {
+		gl.glPushMatrix();
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
+
+		int rimHeight = 10 * 12; // 10 feet
+		float rimZ = -15 * 12 + freeThrowZ; // 15 feet from free throw line at z = -3 feet
+		rimZ += 9 + 6 + 1; // hoop inner radius + distance from backboard + hoop outer radius
+		
+		gl.glTranslatef(0, rimHeight, rimZ);
+		gl.glRotatef(90, 1, 0, 0);
+		
+		glut.glutSolidTorus(1, 10, 50, 50); // Standard rim is 18 inches in diameter
+		gl.glPopMatrix();
+		
+	}
+	
+	void drawFloor(final GL2 gl) {
+		gl.glPushMatrix();
+		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, greenEmissiveMaterial, 0);
+		
+		float floorWidth = 12*10;
+		float floorLength = 12*10;
+		
+		
+		gl.glBegin(gl.GL_QUADS);
+		
+		gl.glVertex3f(-floorWidth, floorY, -floorLength);
+		gl.glVertex3f(-floorWidth, floorY, floorLength);
+		gl.glVertex3f(floorWidth, floorY, floorLength);
+		gl.glVertex3f(floorWidth, floorY, -floorLength);
+		
+		gl.glEnd();
+		
+		gl.glPopMatrix();
+		
 	}
 
 	@Override
@@ -596,25 +660,18 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	public void actionPerformed( ActionEvent e ) {
 
 		/*JButton btn = (JButton) e.getSource();
-
     			if(btn == sphereBtn) {
-
     				sphere_flag = !sphere_flag;
     				sphereBtn.setFocusable(false);
     				teapotBtn.setFocusable(false);
     				cubeBtn.setFocusable(false);
-
     			}
-
     			else if(btn == teapotBtn) {
-
     				teapot_flag = !teapot_flag;
     				sphereBtn.setFocusable(false);
     				teapotBtn.setFocusable(false);
     				cubeBtn.setFocusable(false);
-
     			}
-
     			else if(btn == cubeBtn) {
     				cube_flag = !cube_flag;
     				cubeBtn.setFocusable(false);
