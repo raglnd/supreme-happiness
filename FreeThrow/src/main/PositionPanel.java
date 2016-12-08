@@ -14,8 +14,8 @@ import com.jogamp.newt.event.KeyListener;
 
 public class PositionPanel extends JPanel implements ActionListener {
 	
-	JButton btnRight;
-	JButton btnLeft;
+	static JButton btnRight;
+	static JButton btnLeft;
 	
 	
 	public PositionPanel() {

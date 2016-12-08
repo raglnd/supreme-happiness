@@ -610,8 +610,43 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			else
 				ReplayPanel.ReplayPanel.setVisible(false);
 		}
+		
+		else if(key == 'n') {
+			
+			sphereT.stop();
+			
+			sphereTimePassed = 0;
+			canTransform = false;
 
-		if(key == ' ') 
+			cameraX = 6;
+			cameraY = 5.5f * 12;
+			cameraZ = -1 * 12;
+			
+			lookAtX = 6;
+			lookAtY = 5.5f * 12;
+			lookAtZ = 1;
+			
+			sphereX = 0;
+			sphereY = 5 * 12;
+			sphereZ = 0;
+			tipArrowX = 0;
+			tipArrowY = 16 * 12;
+			tipArrowZ = 18 * 12;
+
+			v0 = 0;
+			PowerPanel.progressBar.setValue(v0);
+			PowerPanel.PowerPanel.setVisible(true);
+			
+			DirectionPanel.btnUp.setEnabled(true);
+			DirectionPanel.btnDown.setEnabled(true);
+			DirectionPanel.btnLeft.setEnabled(true);
+			DirectionPanel.btnRight.setEnabled(true);
+			PositionPanel.btnRight.setEnabled(true);
+			PositionPanel.btnLeft.setEnabled(true);
+			
+		}
+
+		else if(key == ' ') 
 		{
 			if(!PowerPanel.t.isRunning()) 
 			{
@@ -633,6 +668,15 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 					// begin transformation of sphere
 					canTransform = true;
+					
+					// disable all buttons
+					DirectionPanel.btnUp.setEnabled(false);
+					DirectionPanel.btnDown.setEnabled(false);
+					DirectionPanel.btnLeft.setEnabled(false);
+					DirectionPanel.btnRight.setEnabled(false);
+					PositionPanel.btnRight.setEnabled(false);
+					PositionPanel.btnLeft.setEnabled(false);
+					
 					// start Timer for sphere transformation
 					sphereT.start();
 					System.out.println(String.format("{%f, %f, %f}", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]));

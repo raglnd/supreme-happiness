@@ -14,10 +14,10 @@ import com.jogamp.newt.event.KeyListener;
 
 public class DirectionPanel extends JPanel implements ActionListener {
 	
-	JButton btnUp;
-	JButton btnDown;
-	JButton btnRight;
-	JButton btnLeft;
+	static JButton btnUp;
+	static JButton btnDown;
+	static JButton btnRight;
+	static JButton btnLeft;
 	
 	public DirectionPanel() {
 		

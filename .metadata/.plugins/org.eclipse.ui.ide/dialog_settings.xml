@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+<<<<<<< Updated upstream
 		<item value="C:\Users\Sam\Repos\supreme-happiness\CS335-Final"/>
+=======
+		<item value="C:\Users\sdavidson\Repos\supreme-happiness\FreeThrow"/>
+>>>>>>> Stashed changes
 	</list>
 </section>

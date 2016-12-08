@@ -46,6 +46,15 @@ public class PowerPanel extends JPanel {
 						// I want the ball to just drop...
 						// begin transformation of sphere
 						JoglEventListener.canTransform = true;
+						
+						// disable all buttons
+						DirectionPanel.btnUp.setEnabled(false);
+						DirectionPanel.btnDown.setEnabled(false);
+						DirectionPanel.btnLeft.setEnabled(false);
+						DirectionPanel.btnRight.setEnabled(false);
+						PositionPanel.btnRight.setEnabled(false);
+						PositionPanel.btnLeft.setEnabled(false);
+						
 						// start Timer for sphere transformation
 						JoglEventListener.sphereT.start();
 					}
