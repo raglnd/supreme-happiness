@@ -13,11 +13,7 @@
 </bootpath>
 <extensionDirs>
 <entry path="C:\Program Files\Java\jre1.8.0_102\lib\ext"/>
-<<<<<<< Updated upstream
-<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
-=======
 <entry path="C:\Windows\Sun\Java\lib\ext"/>
->>>>>>> Stashed changes
 </extensionDirs>
 <endorsedDirs>
 <entry path="C:\Program Files\Java\jre1.8.0_102\lib\endorsed"/>

@@ -406,7 +406,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 		if(!canTransform) {
 			// Draw Direction Arrow
-			gl.glBegin(gl.GL_LINES);
+			gl.glBegin(GL2.GL_LINES);
 			gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, whiteDiffuseLight, 0);
 			gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, whiteDiffuseLight, 0);
 
@@ -528,7 +528,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, greenEmissiveMaterial, 0);
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, blankMaterial, 0);
 		
-		gl.glBegin(gl.GL_QUADS);
+		gl.glBegin(GL2.GL_QUADS);
 		
 		gl.glVertex3f(backboardLeft, backboardTop, backboardZ);
 		gl.glVertex3f(backboardLeft, backboardBottom, backboardZ);
@@ -563,7 +563,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, greenEmissiveMaterial, 0);
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, blankMaterial, 0);
 			
-		gl.glBegin(gl.GL_QUADS);
+		gl.glBegin(GL2.GL_QUADS);
 		
 		gl.glVertex3f(floorLeft, floorY, floorNear);
 		gl.glVertex3f(floorLeft, floorY, floorFar);
@@ -610,43 +610,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			else
 				ReplayPanel.ReplayPanel.setVisible(false);
 		}
-		
-		else if(key == 'n') {
-			
-			sphereT.stop();
-			
-			sphereTimePassed = 0;
-			canTransform = false;
 
-			cameraX = 6;
-			cameraY = 5.5f * 12;
-			cameraZ = -1 * 12;
-			
-			lookAtX = 6;
-			lookAtY = 5.5f * 12;
-			lookAtZ = 1;
-			
-			sphereX = 0;
-			sphereY = 5 * 12;
-			sphereZ = 0;
-			tipArrowX = 0;
-			tipArrowY = 16 * 12;
-			tipArrowZ = 18 * 12;
-
-			v0 = 0;
-			PowerPanel.progressBar.setValue(v0);
-			PowerPanel.PowerPanel.setVisible(true);
-			
-			DirectionPanel.btnUp.setEnabled(true);
-			DirectionPanel.btnDown.setEnabled(true);
-			DirectionPanel.btnLeft.setEnabled(true);
-			DirectionPanel.btnRight.setEnabled(true);
-			PositionPanel.btnRight.setEnabled(true);
-			PositionPanel.btnLeft.setEnabled(true);
-			
-		}
-
-		else if(key == ' ') 
+		if(key == ' ') 
 		{
 			if(!PowerPanel.t.isRunning()) 
 			{
@@ -668,15 +633,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 					// begin transformation of sphere
 					canTransform = true;
-					
-					// disable all buttons
-					DirectionPanel.btnUp.setEnabled(false);
-					DirectionPanel.btnDown.setEnabled(false);
-					DirectionPanel.btnLeft.setEnabled(false);
-					DirectionPanel.btnRight.setEnabled(false);
-					PositionPanel.btnRight.setEnabled(false);
-					PositionPanel.btnLeft.setEnabled(false);
-					
 					// start Timer for sphere transformation
 					sphereT.start();
 					System.out.println(String.format("{%f, %f, %f}", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]));
