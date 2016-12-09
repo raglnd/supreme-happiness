@@ -590,7 +590,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 								victory = true;
 								sphereVelocity[0]=0;
 								sphereVelocity[2]=0;
-								TIME_MULT = 0.25f;
+								TIME_MULT = 0.1f;
 							}
 							else
 							{
@@ -731,7 +731,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			aboveRim = false;
 			gameOver = false;
 			victory = false;
-			TIME_MULT = INIT_TIME_MULT;
 
 			v0 = 0;
 			PowerPanel.progressBar.setValue(v0);

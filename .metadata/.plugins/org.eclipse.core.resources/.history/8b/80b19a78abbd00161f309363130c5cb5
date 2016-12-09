@@ -590,7 +590,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 								victory = true;
 								sphereVelocity[0]=0;
 								sphereVelocity[2]=0;
-								TIME_MULT = 0.25f;
+								TIME_MULT = 0.5f;
 							}
 							else
 							{

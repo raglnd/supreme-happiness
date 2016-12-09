@@ -40,8 +40,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static float INIT_tipArrowX = 0;
 	static float INIT_tipArrowY = 40 * 12;
 	static float INIT_tipArrowZ = 18 * 12;
-	
-	static float INIT_TIME_MULT = 1f;
 
 	float INIT_v0 = 0;
 	// END INITIAL VALUES //
@@ -173,8 +171,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	float rimZ = backboardZ - rimOuterRadius - 6; // 6 inches away from backboard.
 	
 	static float[] sphereVelocity = {0, 0, 0};
-	
-	static float TIME_MULT = INIT_TIME_MULT;
 	
 	static float[] getUnitVelocity(float x, float y, float z)
 	{
@@ -487,7 +483,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	int updateVelocity()  // Globals are fun!
 	{
-		int millisecondsSinceLastUpdate = (int) (sphereTimePassed * TIME_MULT);
+		int millisecondsSinceLastUpdate = sphereTimePassed;
 		sphereTimePassed = 0;
 	
 		// Collision checks.
@@ -499,7 +495,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 				if (floorNear-sphereRadius < sphereZ && sphereZ < floorFar+sphereRadius)
 				{
 					sphereVelocity[1] = -sphereVelocity[1];
-					sphereY = floorY + sphereRadius;
+					sphereY = (float) (floorY + sphereRadius + (0.0003861 * millisecondsSinceLastUpdate));
 					
 					bounced();
 				}
@@ -590,7 +586,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 								victory = true;
 								sphereVelocity[0]=0;
 								sphereVelocity[2]=0;
-								TIME_MULT = 0.25f;
 							}
 							else
 							{
@@ -731,7 +726,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			aboveRim = false;
 			gameOver = false;
 			victory = false;
-			TIME_MULT = INIT_TIME_MULT;
 
 			v0 = 0;
 			PowerPanel.progressBar.setValue(v0);

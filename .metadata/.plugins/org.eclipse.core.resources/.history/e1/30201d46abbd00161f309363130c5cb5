@@ -487,7 +487,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	int updateVelocity()  // Globals are fun!
 	{
-		int millisecondsSinceLastUpdate = (int) (sphereTimePassed * TIME_MULT);
+		int millisecondsSinceLastUpdate = (int) (sphereTimePassed * INIT_TIME_MULT);
 		sphereTimePassed = 0;
 	
 		// Collision checks.
@@ -590,7 +590,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 								victory = true;
 								sphereVelocity[0]=0;
 								sphereVelocity[2]=0;
-								TIME_MULT = 0.25f;
 							}
 							else
 							{
@@ -731,7 +730,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			aboveRim = false;
 			gameOver = false;
 			victory = false;
-			TIME_MULT = INIT_TIME_MULT;
 
 			v0 = 0;
 			PowerPanel.progressBar.setValue(v0);
