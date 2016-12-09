@@ -26,13 +26,13 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	float INIT_sphereTimePassed = 0;
 	boolean INIT_canTransform = false;
 
-	float INIT_cameraX = 6;
-	float INIT_cameraY = 5.5f * 12;
+	float INIT_cameraX = 0;//6;
+	float INIT_cameraY = 240f;//5.5f * 12;
 	float INIT_cameraZ = -1 * 12;
 	
-	float INIT_lookAtX = 6;
-	float INIT_lookAtY = 5.5f * 12;
-	float INIT_lookAtZ = 1;
+	float INIT_lookAtX = 0; // 6;
+	float INIT_lookAtY = 120f;//5.5f * 12;
+	float INIT_lookAtZ = 200f; //1;
 	
 	static float INIT_sphereX = 0;
 	static float INIT_sphereY = 5 * 12;

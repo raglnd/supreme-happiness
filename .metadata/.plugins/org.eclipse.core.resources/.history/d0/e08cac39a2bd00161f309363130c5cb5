@@ -22,28 +22,6 @@ import com.jogamp.opengl.util.texture.TextureIO;
 
 public class JoglEventListener implements GLEventListener, KeyListener, MouseListener, MouseMotionListener, ActionListener 
 {
-	// INITIAL VALUES //
-	float INIT_sphereTimePassed = 0;
-	boolean INIT_canTransform = false;
-
-	float INIT_cameraX = 6;
-	float INIT_cameraY = 5.5f * 12;
-	float INIT_cameraZ = -1 * 12;
-	
-	float INIT_lookAtX = 6;
-	float INIT_lookAtY = 5.5f * 12;
-	float INIT_lookAtZ = 1;
-	
-	static float INIT_sphereX = 0;
-	static float INIT_sphereY = 5 * 12;
-	static float INIT_sphereZ = 0;
-	static float INIT_tipArrowX = 0;
-	static float INIT_tipArrowY = 32 * 12;
-	static float INIT_tipArrowZ = 18 * 12;
-
-	float INIT_v0 = 0;
-	// END INITIAL VALUES //
-	
 	float backrgb[] = new float[4]; 
 
 	int windowWidth, windowHeight;
@@ -105,13 +83,13 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static int sphereTimePassed = 0;
 	static boolean canTransform = false;
 
-	float cameraX = INIT_cameraX;
-	float cameraY = INIT_cameraY;
-	float cameraZ = INIT_cameraZ;
+	float cameraX = 6;
+	float cameraY = 5.5f * 12;
+	float cameraZ = -1 * 12;
 	
-	float lookAtX = INIT_lookAtX;
-	float lookAtY = INIT_lookAtY;
-	float lookAtZ = INIT_lookAtZ;
+	float lookAtX = 6;
+	float lookAtY = 5.5f * 12;
+	float lookAtZ = 1;
 
 	/* -------- Texture Variables --------- */
 	Texture texNegX = null;
@@ -137,12 +115,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	});
 	
 	static float sphereRadius = 4.775f; // A basketball is ~ 4.775 inches in diameter.
-	static float sphereX = INIT_sphereX; // -5
-	static float sphereY = INIT_sphereY; // 0
-	static float sphereZ = INIT_sphereZ; // 5
-	static float tipArrowX = INIT_tipArrowX; //0
-	static float tipArrowY = INIT_tipArrowY; // 0
-	static float tipArrowZ = INIT_tipArrowZ; // 0
+	static float sphereX = 0; // -5
+	static float sphereY = 5 * 12; // 0
+	static float sphereZ = 0; // 5
+	static float tipArrowX = 0; //0
+	static float tipArrowY = 16 * 12; // 0
+	static float tipArrowZ = 18 * 12; // 0
 	
 	static float freeThrowZ = sphereZ;
 	
@@ -519,21 +497,19 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		float[] cCenter = {xzProj[0], rimHeight, rimZ+xzProj[2]};
 		float[] normal = {cCenter[0]-sphereX, cCenter[1]-sphereY, cCenter[2]-sphereZ};
 		float distance = magnitude(normal);
-		if (distance < 20) System.out.printf("%f\n", distance);
+		if (distance < 100) System.out.printf("%f\n", distance);
 		if (distance < sphereRadius + rimInnerRadius)
 		{
-			float mult = 2 * (float)(dot_prod(sphereVelocity,normal) / Math.pow(magnitude(normal), 2));
+			float[] sphereV = {sphereX, sphereY, sphereZ};
+			float mult = 2 * (float)(dot_prod(sphereV,normal) / Math.pow(magnitude(normal), 2));
 			
-			//System.out.printf("Normal: (%f, %f, %f)\n", normal[0], normal[1], normal[2]);
-			//System.out.printf("(%f, %f, %f)\n", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]);
-			sphereVelocity[0] -= mult*normal[0];
-			sphereVelocity[1] -= mult*normal[1];
-			sphereVelocity[2] -= mult*normal[2];
+			sphereX -= mult*normal[0];
+			sphereY -= mult*normal[1];
+			sphereZ -= mult*normal[2];
 			
 			bounced();
 			
 			System.out.printf("Ding!\n");
-			//System.out.printf("(%f, %f, %f)\n", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]);
 		}
 		
 		// Change due to gravity.
@@ -662,20 +638,20 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			sphereTimePassed = 0;
 			canTransform = false;
 
-			cameraX = INIT_cameraX;
-			cameraY = INIT_cameraY;
-			cameraZ = INIT_cameraZ;
+			cameraX = 6;
+			cameraY = 5.5f * 12;
+			cameraZ = -1 * 12;
 			
-			lookAtX = INIT_lookAtX;
-			lookAtY = INIT_lookAtY;
-			lookAtZ = INIT_lookAtZ;
+			lookAtX = 6;
+			lookAtY = 5.5f * 12;
+			lookAtZ = 1;
 			
-			sphereX = INIT_sphereX;
-			sphereY = INIT_sphereY;
-			sphereZ = INIT_sphereZ;
-			tipArrowX = INIT_tipArrowX;
-			tipArrowY = INIT_tipArrowY;
-			tipArrowZ = INIT_tipArrowZ;
+			sphereX = 0;
+			sphereY = 5 * 12;
+			sphereZ = 0;
+			tipArrowX = 0;
+			tipArrowY = 16 * 12;
+			tipArrowZ = 18 * 12;
 
 			v0 = 0;
 			PowerPanel.progressBar.setValue(v0);

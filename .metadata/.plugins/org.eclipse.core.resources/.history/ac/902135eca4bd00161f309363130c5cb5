@@ -38,7 +38,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static float INIT_sphereY = 5 * 12;
 	static float INIT_sphereZ = 0;
 	static float INIT_tipArrowX = 0;
-	static float INIT_tipArrowY = 32 * 12;
+	static float INIT_tipArrowY = 16 * 12;
 	static float INIT_tipArrowZ = 18 * 12;
 
 	float INIT_v0 = 0;
