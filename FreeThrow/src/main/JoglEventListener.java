@@ -26,6 +26,8 @@ import com.jogamp.opengl.util.texture.TextureIO;
 
 public class JoglEventListener implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
 	
+	static boolean replayTime = false;
+	
 	// INITIAL VALUES //
 	float INIT_sphereTimePassed = 0;
 	boolean INIT_canTransform = false;
@@ -50,9 +52,9 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	float INIT_v0 = 0;
 	// END INITIAL VALUES //
 	
-	boolean aboveRim = false;
-	boolean gameOver = false;
-	boolean victory = false;
+	static boolean aboveRim = false;
+	static boolean gameOver = false;
+	static boolean victory = false;
 	
 	float backrgb[] = new float[4]; 
 
@@ -131,6 +133,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	static float tipArrowX = INIT_tipArrowX; //0
 	static float tipArrowY = INIT_tipArrowY; // 0
 	static float tipArrowZ = INIT_tipArrowZ; // 0
+	
+	static float launchSphereX = sphereX;
+	static float launchSphereY = sphereY;
+	static float launchSphereZ = sphereZ;
+	
+	static float[] launchSphereVelocity = {0,0,0};
 	
 	static float freeThrowZ = sphereZ;
 	
@@ -710,6 +718,16 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			victory = false;
 			TIME_MULT = INIT_TIME_MULT;
 
+			launchSphereX = INIT_sphereX;
+			launchSphereY = INIT_sphereY;
+			launchSphereZ = INIT_sphereZ;
+			
+			launchSphereVelocity[0] = 0;
+			launchSphereVelocity[1] = 0;
+			launchSphereVelocity[2] = 0;
+			
+			replayTime = false;
+			
 			v0 = 0;
 			PowerPanel.progressBar.setValue(v0);
 			PowerPanel.PowerPanel.setVisible(true);
@@ -764,6 +782,16 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 						sphereVelocity[i] *= .005f;
 					}
 					System.out.println(String.format("{%f, %f, %f}", sphereVelocity[0], sphereVelocity[1], sphereVelocity[2]));
+					
+					// Store initial values for everything...
+					launchSphereX = sphereX;
+					launchSphereY = sphereY;
+					launchSphereZ = sphereZ;
+					
+					launchSphereVelocity[0] = sphereVelocity[0];
+					launchSphereVelocity[1] = sphereVelocity[1];
+					launchSphereVelocity[2] = sphereVelocity[2];
+					
 				}
 				else // Didn't stop before maximum 
 				{ 

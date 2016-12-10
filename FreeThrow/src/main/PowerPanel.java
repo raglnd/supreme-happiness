@@ -56,6 +56,13 @@ public class PowerPanel extends JPanel {
 						
 						// start Timer for sphere transformation
 						JoglEventListener.sphereT.start();
+						
+						// Store initial values for everything...
+						JoglEventListener.launchSphereX = JoglEventListener.sphereX;
+						JoglEventListener.launchSphereY = JoglEventListener.sphereY;
+						JoglEventListener.launchSphereZ = JoglEventListener.sphereZ;
+						
+						JoglEventListener.launchSphereVelocity = JoglEventListener.sphereVelocity;
 					}
 					
 					System.out.print("You have " + JoglEventListener.availableTries + " tries remaining.\n");
