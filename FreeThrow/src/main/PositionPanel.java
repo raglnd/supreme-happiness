@@ -23,9 +23,6 @@ public class PositionPanel extends JPanel implements ActionListener {
 		// Create JPanel
 		JPanel PositionPanel = new JPanel(new BorderLayout());
 		
-		// Create JLabels
-		//JLabel positionTitle = new JLabel("Adjust Position on Court");
-		
 		// Create JButtons
 		btnLeft = new JButton("L");
 		btnLeft.setPreferredSize(new Dimension(50, 50));
@@ -37,30 +34,21 @@ public class PositionPanel extends JPanel implements ActionListener {
 		btnRight.setFocusable(false);
 		btnRight.addActionListener(this);
 		
-		//PositionPanel.add(positionTitle, BorderLayout.NORTH);
+		// Add Components to Panel
 		PositionPanel.add(btnLeft, BorderLayout.WEST);
 		PositionPanel.add(btnRight, BorderLayout.EAST);
 		
 		// Add Panel to Frame
-		add(PositionPanel, BorderLayout.EAST);
-		
+		add(PositionPanel, BorderLayout.EAST);	
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == btnRight) {
-			System.out.println("You pressed right button.");
+		if(e.getSource() == btnRight)
 			JoglEventListener.sphereX--;
-			//JoglEventListener.tipArrowX++;
-		}
 		
-		else {
-			System.out.println("You pressed left");
+		else
 			JoglEventListener.sphereX++;
-			//JoglEventListener.tipArrowX--;
-		}
-		
 	}
-
 }

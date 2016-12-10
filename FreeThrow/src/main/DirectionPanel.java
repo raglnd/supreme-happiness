@@ -6,11 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
 
 public class DirectionPanel extends JPanel implements ActionListener {
 	
@@ -23,9 +19,6 @@ public class DirectionPanel extends JPanel implements ActionListener {
 		
 		// Create JPanel
 		JPanel DirectionPanel = new JPanel(new BorderLayout());
-		
-		// Create JLabel
-		//JLabel directionTitle = new JLabel("Adjust Direction of Shot");
 		
 		// Create JButtons
 		btnUp = new JButton("^");
@@ -48,7 +41,7 @@ public class DirectionPanel extends JPanel implements ActionListener {
 		btnLeft.setFocusable(false);
 		btnLeft.addActionListener(this);
 	
-		//DirectionPanel.add(directionTitle);
+		// Add Components to Panel
 		DirectionPanel.add(btnUp, BorderLayout.NORTH);
 		DirectionPanel.add(btnDown, BorderLayout.SOUTH);
 		DirectionPanel.add(btnLeft, BorderLayout.WEST);
@@ -56,7 +49,6 @@ public class DirectionPanel extends JPanel implements ActionListener {
 		
 		// Add Panel to Frame
 		add(DirectionPanel, BorderLayout.WEST);
-		
 	}
 
 	@Override
@@ -72,9 +64,6 @@ public class DirectionPanel extends JPanel implements ActionListener {
 			JoglEventListener.tipArrowX++;
 		
 		else
-			JoglEventListener.tipArrowX--;
-		
+			JoglEventListener.tipArrowX--;	
 	}
-
-
 }

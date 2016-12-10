@@ -21,7 +21,6 @@ public class PowerPanel extends JPanel {
 		PowerPanel = new JPanel(new BorderLayout());
 		
 		progressBar = new JProgressBar();
-		//progressBar.setValue(value);
 		
 		PowerPanel.add(progressBar);
 	
@@ -58,19 +57,18 @@ public class PowerPanel extends JPanel {
 						// start Timer for sphere transformation
 						JoglEventListener.sphereT.start();
 					}
+					
 					System.out.print("You have " + JoglEventListener.availableTries + " tries remaining.\n");
 				}
+				
 				progressBar.setValue(value);
 				if (value == 0)
-				{
 					t.stop();
-				}
 			}
 		});
-		
-		
+			
 		// Add Panel to Frame
 		add(PowerPanel, BorderLayout.WEST);
-	}
-	
+		
+	}	
 }

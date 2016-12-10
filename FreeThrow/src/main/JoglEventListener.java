@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,6 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.Timer;
 
 import com.jogamp.opengl.GL;
@@ -20,8 +24,8 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public class JoglEventListener implements GLEventListener, KeyListener, MouseListener, MouseMotionListener, ActionListener 
-{
+public class JoglEventListener implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
+	
 	// INITIAL VALUES //
 	float INIT_sphereTimePassed = 0;
 	boolean INIT_canTransform = false;
@@ -58,8 +62,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	int mouseX0, mouseY0;	
 	float picked_x = 0.0f, picked_y = 0.0f;
 
-	float focalLength = 1.0f;
-
 	//angle of rotation
 	float rotateAngle = 0.0f; // 
 
@@ -69,44 +71,24 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	float dlb = 1.0f;
 	float dlw = 0.0f;
 
-	//ambient light color variables
+	// ambient light color variables
 	float alr = 1.0f;
 	float alg = 1.0f;
 	float alb = 1.0f;
 
-	//light position variables
+	// light position variables
 	float lx_0 = 0.0f;
 	float ly_0 = 100.0f;
 	float lz_0 = 0.0f; // light0 is at z = 10.0f
 	float lw_0 = 1.0f; // zero is directional light
 
-	float lx_1 = 0.0f;
-	float ly_1 = 10.0f;
-	float lz_1 = 0.0f;
-	float lw_1 = 0.0f;
-
 	/*** SET material property  ***/ 
 
 	float redDiffuseMaterial []    = { 1.0f, 0.0f, 0.0f }; //set the material to red
-	float whiteSpecularMaterial [] = { 1.0f, 1.0f, 1.0f }; //set the material to white
 	float greenEmissiveMaterial [] = { 0.0f, 1.0f, 0.0f }; //set the material to green
 	float whiteSpecularLight []    = { 1.0f, 1.0f, 1.0f }; //set the light specular to white
-
-	float blackAmbientLight[] = { 0.0f, 0.0f, 0.0f }; //set the light ambient to black
 	float whiteDiffuseLight[] = { 1.0f, 1.0f, 1.0f }; //set the diffuse light to white
 	float blankMaterial[]     = { 0.0f, 0.0f, 0.0f }; //set the material to black
-	float grayMaterial[]     = { 0.7f, 0.7f, 0.7f }; //set the material to gray
-	float mShininess[]        = { 20 }; //set the shininess of the material
-
-	boolean diffuse_flag  = false;
-	boolean emissive_flag = false;
-	boolean specular_flag = false;
-
-	boolean smooth_flag = true;
-
-	boolean teapot_flag = true;
-	boolean sphere_flag = true;
-	boolean cube_flag = true;
 
 	static int sphereTimePassed = 0;
 	static boolean canTransform = false;
@@ -154,7 +136,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	
 	static float dampening = 0.9f;
 	
-	
 	static float floorY = 0;
 	static float floorFar = 20 * 12;
 	static float floorNear = -20 * 12;
@@ -183,9 +164,6 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		
 		return vel;
 	}
-
-	static boolean powerFlag = true;
-	static boolean replayFlag = true;
 
 	static int v0 = 0;
 
@@ -386,11 +364,7 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT0);
-
-
 	}
-
-
 
 	public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
 		windowWidth = width;
@@ -415,31 +389,21 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		// TODO Auto-generated method stub
 		final GL2 gl = gLDrawable.getGL().getGL2();
 
-		//gl.glClearColor(0, 0, 0, 1);
 		gl.glClearColor(1, 1, 1, 1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
 		glu.gluLookAt(cameraX, cameraY, cameraZ, lookAtX, lookAtY, lookAtZ, 0, 1, 0);
 
-
-
-		//glu.gluLookAt(0.0, 0.0, focalLength, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0); // eye point, x, y, z, looking at x, y, z, Up direction 
-
-
-
-		//gl.glLoadIdentity(); 
-
 		drawBasketball(gl);
 		drawBackboard(gl);
 		drawRim(gl);
 		drawFloor(gl);
 
-
 		if(!canTransform) {
+			
 			// Draw Direction Arrow
 			gl.glBegin(gl.GL_LINES);
 			gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, whiteDiffuseLight, 0);
@@ -453,34 +417,25 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			gl.glEnd();
 		}
 
-		//gl.glFlush();
-
 		gl.glEnable(GL.GL_TEXTURE_2D);
 		gl.glPushMatrix();
-		//gl.glTranslatef(0, 0, translateZ); // Zoom Image - Key Typed W/S
-		//gl.glRotatef(rot, 0, 1, 0); // Rotate Image - Key Typed A/D
 		drawSkybox(gl); // Draw Skybox
 		gl.glPopMatrix();
 		gl.glDisable(GL.GL_TEXTURE_2D);
 
 	}
 
-	void bounced()
-	{
+	void bounced() {
 		for (int i = 0; i < 3; ++i)
-		{
 			sphereVelocity[i] *= dampening;
-		}
 	}
 	
-	float magnitude(float[] a)
-	{
+	float magnitude(float[] a) {
 		float ans = (float)Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2));
 		return ans;
 	}
 	
-	float dot_prod(float[] a, float[] b)
-	{
+	float dot_prod(float[] a, float[] b) {
 		return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 	}
 	
@@ -540,14 +495,11 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		
 		// Change due to gravity.
 		sphereVelocity[1] -= (0.0003861 * millisecondsSinceLastUpdate); // WolframAlpha calculated.
-		
-		
-		
+	
 		return millisecondsSinceLastUpdate;
 	}
 	
-	void drawBasketball(final GL2 gl) 
-	{
+	void drawBasketball(final GL2 gl) {
 		gl.glPushMatrix();
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, redDiffuseMaterial, 0);
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, blankMaterial, 0);
@@ -603,11 +555,14 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 						if (victory)
 						{
 							System.out.printf("Winner!\n");
+							playSound();
 						}
 						else
 						{
 							System.out.printf("Loser.\n");
+							playSound();
 						}
+						ReplayPanel.ReplayPanel.setVisible(true);
 					}
 				}
 			}
@@ -622,7 +577,37 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		gl.glPopMatrix();
 	}
 	
+	// Resource: http://stackoverflow.com/questions/6045384/playing-mp3-and-wav-in-java
+	void playSound() {
+		if(victory) {
+			try {
+				// Resource: http://soundbible.com/468-Applause-Moderate-3-.html
+		        AudioInputStream sound = AudioSystem.getAudioInputStream(new File("win.wav").getAbsoluteFile());
+		        Clip c = AudioSystem.getClip();
+		        c.open(sound);
+		        c.start();
+		    } catch(Exception ex) {
+		        System.out.println("Error playing sound.");
+		        ex.printStackTrace();
+		    }
+		}
+		
+		else {
+			try {
+				// Resource: http://soundbible.com/445-Crowd-Boo-1.html
+		        AudioInputStream sound = AudioSystem.getAudioInputStream(new File("lose.wav").getAbsoluteFile());
+		        Clip c = AudioSystem.getClip();
+		        c.open(sound);
+		        c.start();
+		    } catch(Exception ex) {
+		        System.out.println("Error playing sound.");
+		        ex.printStackTrace();
+		    }
+		}
+	}
+	
 	void drawBackboard(final GL2 gl) {
+		
 		gl.glPushMatrix();
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, greenEmissiveMaterial, 0);
 		gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, blankMaterial, 0);
@@ -695,20 +680,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 		// TODO Auto-generated method stub
 
 		char key= e.getKeyChar();
-		System.out.printf("Key typed: %c\n", key); 
-
-		if(key == 'r') 
-		{
-			replayFlag = !replayFlag;
-			if(replayFlag)
-				ReplayPanel.ReplayPanel.setVisible(true);
-			else
-				ReplayPanel.ReplayPanel.setVisible(false);
-		}
 		
-		else if(key == 'n') {
+		if(key == 'n') { // Resets game
 			
 			sphereT.stop();
+			
+			ReplayPanel.ReplayPanel.setVisible(false);
 			
 			sphereTimePassed = 0;
 			canTransform = false;
@@ -798,11 +775,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-
 		float XX = (e.getX()-windowWidth*0.5f)*orthoX/windowWidth;
 		float YY = -(e.getY()-windowHeight*0.5f)*orthoX/windowHeight;
-
-
 	}
 
 	@Override
@@ -859,44 +833,4 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 	}
 
-
-	public void actionPerformed( ActionEvent e ) {
-
-		/*JButton btn = (JButton) e.getSource();
-    			if(btn == sphereBtn) {
-    				sphere_flag = !sphere_flag;
-    				sphereBtn.setFocusable(false);
-    				teapotBtn.setFocusable(false);
-    				cubeBtn.setFocusable(false);
-    			}
-    			else if(btn == teapotBtn) {
-    				teapot_flag = !teapot_flag;
-    				sphereBtn.setFocusable(false);
-    				teapotBtn.setFocusable(false);
-    				cubeBtn.setFocusable(false);
-    			}
-    			else if(btn == cubeBtn) {
-    				cube_flag = !cube_flag;
-    				cubeBtn.setFocusable(false);
-    				sphereBtn.setFocusable(false);
-    				teapotBtn.setFocusable(false);
-    			}*/
-
-
-
-		//	JOptionPane.showMessageDialog( null, "You pressed: " + e.getActionCommand() );
-
-	}
-
-
-
-
 }
-
-
-//class MyWin extends WindowAdapter {
-//	 public void windowClosing(WindowEvent e)
-//   {
-//       System.exit(0);
-//   }
-//}

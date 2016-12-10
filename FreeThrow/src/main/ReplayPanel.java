@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class ReplayPanel extends JPanel {
 
@@ -31,11 +30,9 @@ public class ReplayPanel extends JPanel {
 		ReplayPanel.add(speed[1], BorderLayout.CENTER);
 		ReplayPanel.add(speed[2], BorderLayout.EAST);
 		
+		ReplayPanel.setVisible(false);
+		
 		// Add Panel to Frame
 		add(ReplayPanel, BorderLayout.SOUTH);
-		
-		
-		
 	}
-	
 }
