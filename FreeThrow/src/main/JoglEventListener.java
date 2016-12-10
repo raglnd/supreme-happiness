@@ -26,6 +26,15 @@ import com.jogamp.opengl.util.texture.TextureIO;
 
 public class JoglEventListener implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
 	
+	float move_speed = 5f;
+	float look_speed = 15f;
+	
+	float old_XX=0;
+	float old_YY=0;
+	
+	float x_angle = 0;
+	float y_angle = 0;
+	
 	static boolean replayTime = false;
 	
 	// INITIAL VALUES //
@@ -110,9 +119,8 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	Texture texPosY = null;
 	Texture texNegZ = null;
 	Texture texPosZ = null;
-	Texture texSmiley = null;
 
-	int texIDNegX; int texIDPosX; int texIDNegY; int texIDPosY; int texIDNegZ; int texIDPosZ; int texIDSmiley;
+	int texIDNegX; int texIDPosX; int texIDNegY; int texIDPosY; int texIDNegZ; int texIDPosZ;
 	 /* --------- End of Texture Variables ------------ */
 	
 	static int timerUpdateMilliseconds = 20;
@@ -394,6 +402,10 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 
 	@Override
 	public void display(GLAutoDrawable gLDrawable) {
+		lookAtX = (float)Math.sin(Math.toRadians(-x_angle)) + cameraX;
+		lookAtY = (float)Math.sin(Math.toRadians( y_angle)) + cameraY;
+		lookAtZ = (float)Math.cos(Math.toRadians(-x_angle)) + cameraZ;
+		
 		// TODO Auto-generated method stub
 		final GL2 gl = gLDrawable.getGL().getGL2();
 
@@ -673,7 +685,46 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	@Override
 	public void keyTyped(KeyEvent e) 
 	{
-
+		float t_look_at_x = (float)Math.sin(Math.toRadians(-x_angle-90f)) + cameraX;
+		float t_look_at_z = (float)Math.cos(Math.toRadians(-x_angle-90f)) + cameraZ;
+		
+		char key= e.getKeyChar();
+		System.out.printf("Key typed: %c\n", key); 
+		
+		if (replayTime)
+		{
+			switch(key) 
+			{
+			case 'w':
+			case 'W':
+				cameraX -= move_speed*(cameraX - lookAtX);
+				cameraZ -= move_speed*(cameraZ - lookAtZ);
+				break;
+			case 's':
+			case 'S':
+				cameraX += move_speed*(cameraX - lookAtX);
+				cameraZ += move_speed*(cameraZ - lookAtZ);
+				break;
+			case 'a':
+			case 'A':
+				cameraX += move_speed*(cameraX - t_look_at_x);
+				cameraZ += move_speed*(cameraZ - t_look_at_z);
+				break;
+			case 'd':
+			case 'D':
+				cameraX -= move_speed*(cameraX - t_look_at_x);
+				cameraZ -= move_speed*(cameraZ - t_look_at_z);
+				break;
+			case 'o':
+			case 'O':
+				cameraY += move_speed;
+				break;
+			case 'l':
+			case 'L':
+				cameraY -= move_speed;
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -712,6 +763,12 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 			tipArrowX = INIT_tipArrowX;
 			tipArrowY = INIT_tipArrowY;
 			tipArrowZ = INIT_tipArrowZ;
+			
+			old_XX=0;
+			old_YY=0;
+			
+			x_angle = 0;
+			y_angle = 0;
 			
 			aboveRim = false;
 			gameOver = false;
@@ -810,7 +867,29 @@ public class JoglEventListener implements GLEventListener, KeyListener, MouseLis
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
-
+		float XX = (e.getX()-windowWidth*0.5f)*orthoX/windowWidth;
+		float YY = -(e.getY()-windowHeight*0.5f)*orthoX/windowWidth;
+		System.out.printf("Point moved: (%.3f, %.3f)\n", XX, YY);
+		
+		
+		float dist_x = XX - old_XX;
+		float dist_y = YY - old_YY;
+		
+		old_XX = XX;
+		old_YY = YY;
+		if (replayTime)
+		{
+			x_angle = x_angle + look_speed*dist_x;
+			y_angle = y_angle + look_speed*dist_y;
+			if (y_angle >= 89.8f)
+			{
+				y_angle = 89.8f;
+			}
+			else if (y_angle <= -89.8f)
+			{
+				y_angle = -89.8f;
+			}
+		}
 	}
 
 	@Override
